@@ -52,7 +52,7 @@ td.n,th.n{text-align:right}
     <div class="full"><label for="date">Date</label><input id="date" type="date"></div>
     <div><label for="start">Start time</label><select id="start"></select></div>
     <div><label for="end">Finish time</label><select id="end"></select></div>
-    <div class="full"><label for="brk">Unpaid break (minutes)</label><input id="brk" type="number" inputmode="numeric" min="0" step="5" value="0"></div>
+    <div class="full"><label for="brk">Unpaid break</label><select id="brk"><option value="0">No break</option><option value="15">15 minutes</option><option value="30">30 minutes</option></select></div>
     <div class="full"><button id="add" type="button">Add shift</button><p class="err" id="err" role="alert"></p></div>
   </div>
 </section>
@@ -156,12 +156,14 @@ td.n,th.n{text-align:right}
     $("tHours").textContent=total.toFixed(2);
     $("tPay").textContent=money(total*rate);
     var head="Hours for "+$("range").textContent;
+    var fo={weekday:"short",day:"numeric",month:"short",year:"numeric"};
+    var subj="Work hours: "+weekStart.toLocaleDateString("en-NZ",fo)+" to "+end.toLocaleDateString("en-NZ",fo);
     var lines=list.map(function(x){
       return parse(x.date).toLocaleDateString("en-NZ",{weekday:"short",day:"numeric",month:"short"})+": "+fmtTime(x.start)+" to "+fmtTime(x.end)+", break "+x.brk+" min, "+shiftHours(x).toFixed(2)+" hours";
     });
     var text=head+"\n\n"+(lines.length?lines.join("\n"):"No shifts this week.")+"\n\nTotal hours: "+total.toFixed(2)+"\nHourly rate: "+money(rate)+"\nTotal pay: "+money(total*rate)+" (before tax)";
     $("summary").value=text;
-    $("mail").setAttribute("href","mailto:?subject="+encodeURIComponent(head)+"&body="+encodeURIComponent(text));
+    $("mail").setAttribute("href","mailto:?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(text));
     $("copied").textContent="";
   }
   $("copy").addEventListener("click",function(){
