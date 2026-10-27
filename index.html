@@ -104,9 +104,10 @@ td.n,th.n{text-align:right}
   function fmtTime(t){var a=t.split(":"),h=+a[0],ap=h>=12?"pm":"am";h=h%12||12;return h+":"+a[1]+" "+ap}
   function money(n){return "$"+n.toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2})}
 
+  var ranges={start:[5*60,13*60],end:[9*60,21*60]};
   ["start","end"].forEach(function(id){
     var h='<option value="">Select</option>';
-    for(var m=0;m<1440;m+=30){var t=pad(Math.floor(m/60))+":"+pad(m%60);h+='<option value="'+t+'">'+fmtTime(t)+'</option>';}
+    for(var m=ranges[id][0];m<=ranges[id][1];m+=30){var t=pad(Math.floor(m/60))+":"+pad(m%60);h+='<option value="'+t+'">'+fmtTime(t)+'</option>';}
     $(id).innerHTML=h;
   });
 
